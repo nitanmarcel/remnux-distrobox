@@ -1,45 +1,54 @@
-# remnux-distrobox
+# REMnux Distrobox
 
-Docker container with REMnux compatible with Distrobox. Made mostly for my personal use since the official docker images are old.
-And due to newer kernel versions not being available on 20.04 which is required for REMnux.
+A ready-to-use Docker container with REMnux for malware analysis, designed to work seamlessly with Distrobox on any Linux distribution.
 
-## Version
-- v2025.9.1
 
-## Install
+## Quick Start
 
-```
-distrobox create --name REMnux --image marcelalexandrunitan/remnux-distrobox:202591
-distrobox enter REMnux
-```
+### Prerequisites
+- Docker or Podman
+- Distrobox installed ([Installation Guide](https://github.com/89luca89/distrobox#installation))
 
-## Post-Install
+### Installation
 
-- At the creation of the image, an user `remnux` is being passed to `remnux-cli`. You can copy the files saved in `/home/remnux` into your actual user or leave it as it is.
+1. Create the REMnux container:
 
-```
- remnux
-├──  .config
-│   └──  Code
-│       └──  User
-│           └──  settings.json
-├──  .cpan
-├──  .curlrc
-├──  .dbus
-├──  .ghidra
-│   ├──  .ghidra_10.1.1_PUBLIC
-│   │   ├──  preferences
-│   │   └──  tools
-│   │       ├──  _code_browser.tcd
-│   │       └──  '_version _tracking.tcd'
-│   └──  gdt
-│       ├──  ntddk_32.gdt
-│       ├──  ntddk_64.gdt
-│       ├──  readme.txt
-│       ├──  winapi_32.gdt
-│       └──  winapi_64.gdt
-├──  .malwapi.conf
+```bash
+distrobox create --name REMnux --image marcelalexandrunitan/remnux-distrobox:latest
 ```
 
-- `remnux update`, `remnux upgrade` might fail if you encounter the same issue as me, where your distro kernel version is not available anymore on 20.04. In that case check this repo for any updates.
+2. Enter the container:
 
+```bash
+distrobox enter REMnux -- bash -l
+```
+
+> **Note**: The `-- bash -l` parameter is required during the first launch if your default shell is not bash (e.g., zsh). This ensures REMnux's `update`/`upgrade` commands function correctly. After initial setup, you can simply use `distrobox enter REMnux`.
+
+### Keeping REMnux Updated
+
+Run this command from inside the container to update all REMnux components:
+
+```bash
+remnux upgrade --mode=addon --user=$(whoami)
+```
+
+## Configuration Details
+
+### Kernel Headers
+
+The container automatically creates a placeholder kernel-headers package matching your host kernel version and marks it as "held" to prevent update failures. This ensures REMnux's CLI tools won't attempt to install incompatible kernel headers from Ubuntu 20.04 repositories.
+
+### User Files
+
+A default `remnux` user is preconfigured with analysis-ready settings. Important config files are located at:
+
+- `/home/remnux/.config/Code/User/settings.json` - VSCode settings
+- `/home/remnux/.ghidra/` - Ghidra configuration and data types
+- `/home/remnux/.malwapi.conf` - Malware API configuration
+
+Copy specific configuration files to your user's home directory
+
+## Contributing
+
+Improvements and bug fixes are welcome! Please submit pull requests or open issues on the GitHub repository.
