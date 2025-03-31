@@ -9,7 +9,7 @@ And due to newer kernel versions not being available on 20.04 which is required 
 ## Install
 
 ```
-distrobox create --name REMnux --image marcelalexandrunitan/remnux-distrobox:{version}
+distrobox create --name REMnux --image marcelalexandrunitan/remnux-distrobox:202591
 distrobox enter REMnux
 ```
 
