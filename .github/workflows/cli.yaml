@@ -31,4 +31,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: marcelalexandrunitan/remnux-distrobox:202591
+          tags: marcelalexandrunitan/remnux-distrobox:latest
